@@ -60,18 +60,18 @@ const NOT_SUPPORTED_RULE_NAMES = new Set([
  * @typedef {Map<string, RuleEntry>} RuleEntries
  */
 
-/** @param {ReturnType<import("eslint").Linter["getRules"]>} loadedAllRules */
+/** @param {import("./eslint-rules-meta.cjs").RuleMetaRecord} loadedAllRules */
 exports.createRuleEntries = (loadedAllRules) => {
   /** @type {RuleEntries} */
   const rulesEntry = new Map();
 
-  for (const [name, rule] of loadedAllRules) {
+  for (const [name, ruleMeta] of Object.entries(loadedAllRules)) {
     // Default eslint rules are not prefixed
     const prefixedName = name.includes("/") ? name : `eslint/${name}`;
 
-    const docsUrl = rule.meta?.docs?.url ?? "";
-    const isDeprecated = rule.meta?.deprecated ?? false;
-    const isRecommended = rule.meta?.docs?.recommended ?? false;
+    const docsUrl = ruleMeta?.docs?.url ?? "";
+    const isDeprecated = ruleMeta.deprecated ?? false;
+    const isRecommended = ruleMeta.docs?.recommended ?? false;
 
     rulesEntry.set(prefixedName, {
       docsUrl,

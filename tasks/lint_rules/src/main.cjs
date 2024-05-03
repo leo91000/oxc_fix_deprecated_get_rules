@@ -11,6 +11,7 @@ const {
 } = require("./oxlint-rules.cjs");
 const { renderMarkdown } = require("./markdown-renderer.cjs");
 const { updateGitHubIssue } = require("./result-reporter.cjs");
+const { fetchEslintRulesMeta } = require("./eslint-rules-meta.cjs");
 
 const HELP = `
 Usage:
@@ -56,7 +57,8 @@ Plugins: ${Array.from(ALL_TARGET_PLUGINS.keys()).join(", ")}
   //
   // Generate entry and update status
   //
-  const ruleEntries = createRuleEntries(linter.getRules());
+  const rulesMeta = await fetchEslintRulesMeta()
+  const ruleEntries = createRuleEntries(rulesMeta);
   await updateImplementedStatus(ruleEntries);
   updateNotSupportedStatus(ruleEntries);
 
